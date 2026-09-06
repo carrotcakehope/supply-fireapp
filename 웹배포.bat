@@ -78,6 +78,13 @@ if %errorlevel% neq 0 (
 
 git fetch origin
 git reset --soft origin/main
+
+:: docs/holidays.json 은 GitHub Action(fetch-holidays.yml)이 원격에서 자동 갱신한다.
+:: reset --soft 는 인덱스를 그대로 두므로, 아래 git add docs/ 가 로컬의 낡은 복사본을
+:: 스테이징해 원격의 최신 공휴일을 되돌려버린다(실제로 발생했었음).
+:: 그래서 add 전에 원격 최신본을 작업트리로 먼저 가져온다.
+git checkout origin/main -- docs/holidays.json
+
 git add docs/
 git add www/
 if exist loading git add loading/
